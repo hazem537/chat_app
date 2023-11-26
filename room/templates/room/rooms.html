@@ -1,0 +1,27 @@
+{% extends "chat/base.html" %}
+
+ {% block title %}
+ rooms{% endblock title %}
+
+
+
+ {% block content %}
+ 
+ <h1>Hello in rooms</h1>
+
+
+ <div class="row">
+{% for room in rooms  %}    
+    <div class="col">
+      <div class="card">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <h5 class="card-title">{{room.name}}</h5>
+          <a href=" {% url "room" room.slug %} " class="btn btn-primary">Join</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+ {% endblock content %}

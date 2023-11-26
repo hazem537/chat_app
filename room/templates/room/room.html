@@ -1,0 +1,83 @@
+{% extends "chat/base.html" %}
+ {% load static %}
+{% block title %}
+ {{room.name}}{% endblock title %}
+
+ {% block cssfiles %}
+ <link rel="stylesheet" href="{% static "room/style.css" %} "> 
+ {% endblock cssfiles %}
+
+
+
+
+ {% block content %}
+ 
+ <h1>Hello in {{room}}</h1>
+
+<div class="board">
+  {% for message in messages  %}
+  <div class="message">
+    <h3>{{message.user.username}}</h3>
+    <p>{{message.content}}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<form action="" method="post"class ="w-100 d-flex">
+  <input  class ="w-100 form-control "type="text" name="content" id="chat-message-input" placeholder="Enter Your message">
+  <input type="submit" value="send message" class="btn btn-primary" id="chat-message-submit" >
+</form>
+
+
+ {% endblock content %}
+
+
+ {% block scripts %}
+ 
+ {{room.slug |json_script:"json_roomname"}}
+ {{request.user.username |json_script:"json_username"}}
+ <script>
+  const userName = JSON.parse(document.getElementById("json_username").textContent)
+  const roomName = JSON.parse(document.getElementById("json_roomname").textContent)
+   const chatSocket = new WebSocket(
+    "ws://"+window.location.host+'/ws/'+roomName+"/"
+  )
+  chatSocket.onmessage=function(e){
+    console.log("on message");
+    const data =JSON.parse(e.data);
+    if(data.message){
+    let html=`<div class="message">
+      <h3>${data.username}</h3>
+      <p>${data.message}</p>
+      </div>`
+      document.querySelector(".board").innerHTML+=html;
+      scrolltobottom()
+    }else{
+      alert("hthis message is empty")
+    }
+  }
+  chatSocket.onclose = function(e){ 
+    console.log("on close")
+  }
+  const submit_buttom =document.getElementById("chat-message-submit"); 
+  submit_buttom.addEventListener("click",function(e) {
+    e.preventDefault();
+    const messageInputDom = document.querySelector("#chat-message-input");
+    const message= messageInputDom.value;
+    chatSocket.send(JSON.stringify({
+      "message":message,
+      "username":userName,
+      "room":roomName
+    }));
+    messageInputDom.vale= "";
+    
+  })
+  function scrolltobottom(){
+    boardDom =document.querySelector(".board"); 
+
+    boardDom.scrollTop=boardDom.scrollHeight
+  }
+  scrolltobottom()
+
+ </script>
+ {% endblock scripts %}
