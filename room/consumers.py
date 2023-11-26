@@ -1,8 +1,17 @@
 import json 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync ,sync_to_async
-from room.models import Room ,Message
-from django.contrib.auth.models import User
+from django.utils.functional import  SimpleLazyObject
+
+Room = SimpleLazyObject(lambda: __import__('room.models', fromlist=['Room']).Room)
+Message = SimpleLazyObject(lambda: __import__('room.models', fromlist=['Message']).Message)
+User = SimpleLazyObject(lambda: __import__('django.contrib.auth.models', fromlist=['User']).User)
+
+# Room = lazy_import('room.models', ['Room'])
+# Message = lazy_import('room.models', ['Message'])
+# User = lazy_import('django.contrib.auth.models', ['User'])
+# from room.models import Room ,Message
+# from django.contrib.auth.models import User
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
