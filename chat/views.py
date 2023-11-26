@@ -14,6 +14,8 @@ def signup(request):
             user = form.save()
             login(request,user)
             return redirect("index")
+        else:
+            return render(request,"chat/signup.html",{"form":form})        
     else:
         form  =SignUpForm()
         return render(request,"chat/signup.html",{"form":form})    
