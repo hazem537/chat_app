@@ -32,6 +32,7 @@ LOGIN_URL= "/login/"
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'room',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,16 +86,16 @@ CHANNEL_LAYERS={
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-import dj_database_url
 DATABASES = {
-    'default': dj_database_url.config(default="postgres://default:0qe8HQNRiwJp@ep-aged-silence-54497879-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb")
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+# import dj_database_url
+# DATABASES = {
+#     'default': dj_database_url.config(default="postgres://default:0qe8HQNRiwJp@ep-aged-silence-54497879-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb")
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
