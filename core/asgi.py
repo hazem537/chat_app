@@ -17,7 +17,7 @@ class DebugMiddleware(BaseMiddleware):
         return await super().__call__(scope, receive, send)
 application =ProtocolTypeRouter({
     "http":get_asgi_application(),
-    "websocket":DebugMiddleware(
+    "websocket":AuthMiddlewareStack(
         URLRouter(
             websocket_urlpatterns
         )

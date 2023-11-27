@@ -23,7 +23,8 @@
   {% endfor %}
 </div>
 
-<form action="" class ="w-100 d-flex">
+<form action="" method="post" class ="w-100 d-flex">
+ {% csrf_token %}
   <input  class ="w-100 form-control "type="text" name="content" id="chat-message-input" placeholder="Enter Your message">
   <input type="submit" value="send message" class="btn btn-primary" id="chat-message-submit" >
 </form>
